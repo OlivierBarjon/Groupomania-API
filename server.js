@@ -17,7 +17,7 @@ const normalizePort = val => {
 };
 
 //console.log(process.env); // LISTES VARIABLES ENVIRONNEMENT POUR TEST
-const port = normalizePort(process.env.PORT || '3000'); // port 3000 ou port défini par l'environnement
+const port = normalizePort(process.env.PORT || '5432'); // port 5432 ou port défini par l'environnement
 app.set('port', port); // assignation du port à l'application express
 
 
@@ -52,4 +52,4 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-server.listen(port); // configuration du serveur sur le port (3000 par défaut)
+server.listen(port); // configuration du serveur sur le port (5432 pour Heroku)
