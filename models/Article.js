@@ -26,6 +26,5 @@ module.exports = function(sequelize, DataTypes) {
       dislikes: DataTypes.NUMBER,
       usersLiked: DataTypes.STRING,
       usersDisliked: DataTypes.STRING,
-      comments :DataTypes.STRING,
     })
   }
