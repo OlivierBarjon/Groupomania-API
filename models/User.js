@@ -12,13 +12,17 @@ userSchema.plugin(uniqueValidator); // on applique le plugin unique validateur a
 
 module.exports = mongoose.model('User', userSchema); */
 
+const sequelize = require('sequelize');// on récupère sequelize
+
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define("User", {
-      firstname: DataTypes.STRING,
-      lastname: DataTypes.STRING,
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
-      imgUrl: DataTypes.STRING,
-      isAdmin: DataTypes.BOOLEAN
-    })
+      firstname: {type:DataTypes.STRING, allowNull: false},
+      lastname: {type:DataTypes.STRING, allowNull: false},
+      email: {type:DataTypes.STRING, allowNull: false},
+      password: {type:DataTypes.STRING, allowNull: false},
+      imgUrl: {type:DataTypes.STRING, allowNull: false},
+      isAdmin: {type:DataTypes.BOOLEAN, allowNull: false},
+    },
+    {freezeTableName: true}
+    )
   }
