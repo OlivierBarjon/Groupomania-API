@@ -2,7 +2,6 @@ const express = require('express'); // on importe express
 const app = express(); // création d'une application express
 const { Sequelize } = require('sequelize');// on récupère sequelize
 const bodyParser = require('body-parser');// on récupère le bodyparser
-//const mongoSanitize = require('express-mongo-sanitize'); // on récupère mongo express sanitize
 const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
 require('dotenv').config() /*Variables d'environnement */
 

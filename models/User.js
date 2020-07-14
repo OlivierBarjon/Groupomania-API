@@ -1,28 +1,27 @@
-/* const mongoose = require('mongoose'); // récupération de mongoose
-const uniqueValidator = require('mongoose-unique-validator'); // récupération du package gérant la propriété "unique" afin d'éviter d'avoir plusieurs utilisateurs avec la même adresse mail
-
-const userSchema = mongoose.Schema({
-    //userId:{type:String}, // crée au moment de la connection (login) à partir du _id crée par MongoDb
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
-
-});
-
-userSchema.plugin(uniqueValidator); // on applique le plugin unique validateur au schéma
-
-module.exports = mongoose.model('User', userSchema); */
-
-const sequelize = require('sequelize');// on récupère sequelize
-
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("User", {
-      firstname: {type:DataTypes.STRING, allowNull: false},
-      lastname: {type:DataTypes.STRING, allowNull: false},
-      email: {type:DataTypes.STRING, allowNull: false},
-      password: {type:DataTypes.STRING, allowNull: false},
-      imgUrl: {type:DataTypes.STRING, allowNull: false},
-      isAdmin: {type:DataTypes.BOOLEAN, allowNull: false},
-    },
-    {freezeTableName: true}
-    )
-  }
+  class User extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      models.User.hasMany(models.Article)// define association here
+    }
+  };
+  User.init({
+    username: DataTypes.STRING,
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    imgUrl: DataTypes.STRING,
+    isAdmin: DataTypes.BOOLEAN
+  }, {
+    sequelize,
+    modelName: 'User',
+  });
+  return User;
+};

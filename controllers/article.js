@@ -1,4 +1,4 @@
-const Sauce = require('../models/Article'); // récupération du modèle
+const Sauce = require('../models/ArticleOLD'); // récupération du modèle
 const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
 
 

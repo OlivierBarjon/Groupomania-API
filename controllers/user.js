@@ -1,4 +1,4 @@
-const User = require('../models/User'); // récupération du modèle user
+const User = require('../models/UserOLD'); // récupération du modèle user
 const bcrypt = require('bcrypt'); // récupération de bcrypt
 const jwt = require('jsonwebtoken'); // récupération de JWT
 
