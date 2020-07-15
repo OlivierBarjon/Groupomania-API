@@ -3,10 +3,10 @@ const app = express(); // création d'une application express
 const { Sequelize } = require('sequelize');// on récupère sequelize
 const bodyParser = require('body-parser');// on récupère le bodyparser
 const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
-require('dotenv').config() /*Variables d'environnement */
+require('dotenv').config() /*On récupère les variables d'environnement */
 
 //const articleRoutes = require('./routes/article'); // on récupère les routes pour les articles
-//const userRoutes = require('./routes/user'); // on récupère les routes pour user
+const userRoutes = require('./routes/user'); // on récupère les routes pour user
 //const path = require('path'); // on récupère l'élément de node.js permettant d'accéder au chemin de notre systeme de fichiers
 //const { Server } = require('http');
 
@@ -45,7 +45,7 @@ app.use(helmet());
 /* CHEMIN D'ACCES DES ENDPOINTS */
 
 //app.use('/api/article', articleRoutes);// 
-//app.use('/api/auth', userRoutes);
+app.use('/api/auth', userRoutes);
 //app.use('/images', express.static(path.join(__dirname, 'images'))) // on veut que cette requête serve le dossier statique /image dont l'adresse est déterminé par la méthode path.join (avec __dirname = nom du dossier dans lequel on va se trouver auquel on va ajouter "images" ?????????????????????????????????????????????????????????
 
 // EXPORT SERVER

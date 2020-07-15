@@ -1,4 +1,5 @@
-const User = require('../models/UserOLD'); // récupération du modèle user
+//const User = require('../models/UserOLD'); // récupération du modèle user OLD
+const User = require('../models/user');// récupération du modèle user
 const bcrypt = require('bcrypt'); // récupération de bcrypt
 const jwt = require('jsonwebtoken'); // récupération de JWT
 
@@ -9,9 +10,11 @@ const jwt = require('jsonwebtoken'); // récupération de JWT
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10) // on hash le mot de passe (on exécute 10 fois l'algo pour crypter correctement le mot de passe)
         .then(hash => {// on récupère le hash du mdp (c'est une promise) 
-            const user = new User({ // on crée le nouveau utilisateur avec le modèle mongoose
+            const user = new User({ // on crée le nouveau utilisateur avec le modèle sequelize
+                username: req.body.username,
                 email: req.body.email, // on enregistre l'email du body dans le paramètre email
-                password: hash  // on enregistre le hash dans le paramètre password
+                password: hash,  // on enregistre le hash dans le paramètre password
+                isAdmin: req.body.isAdmin // on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
             });
             user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
                 .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
