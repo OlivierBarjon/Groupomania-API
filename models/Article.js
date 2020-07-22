@@ -1,7 +1,10 @@
-'use strict';
+
+const User = require('./User');// récupération du modèle user ?????????
+//'use strict';//??
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Article extends Model {
     /**
@@ -24,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     idUSERS: DataTypes.INTEGER,
     imageUrl: DataTypes.STRING,
-    likes: DataTypes.INT,
-    dislikes: DataTypes.INT,
+    likes: DataTypes.INTEGER,
+    dislikes: DataTypes.INTEGER,
     usersLiked: DataTypes.STRING,
     usersDisliked: DataTypes.STRING
   }, {

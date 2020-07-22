@@ -1,7 +1,7 @@
 //const User = require('../models/UserOLD'); // récupération du modèle user OLD
-const User = require('../models/user');// récupération du modèle user
+const User = require('../models/User');// récupération du modèle user
 const bcrypt = require('bcrypt'); // récupération de bcrypt
-const jwt = require('jsonwebtoken'); // récupération de JWT
+//const jwt = require('jsonwebtoken'); // récupération de JWT
 
 
 /* ### LOGIQUE MÉTIER ### */
@@ -20,11 +20,43 @@ exports.signup = (req, res, next) => {
                 .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
                 .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => res.status(500).json({ error : "erreur signup" }));
 };
 
+/* exports.signup = (req, res, next) => {
+    bcrypt.hash(req.body.password, 10) // on hash le mot de passe (on exécute 10 fois l'algo pour crypter correctement le mot de passe)
+        .then(hash => {// on récupère le hash du mdp (c'est une promise) 
+            const user = new User({ // on crée le nouveau utilisateur avec le modèle sequelize
+                username: req.body.username,
+                email: req.body.email, // on enregistre l'email du body dans le paramètre email
+                password: hash,  // on enregistre le hash dans le paramètre password
+                isAdmin: req.body.isAdmin // on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
+            });
+            user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
+                .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
+                .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
+        })
+        .catch(error => res.status(500).json({ error : "erreur signup" }));
+}; */
+
+////////////////////////////
+/* exports.signup = (req, res, next) => {
+    const user = new User({ // on crée le nouveau utilisateur avec le modèle sequelize
+        username: req.body.username,
+        email: req.body.email, // on enregistre l'email du body dans le paramètre email
+        password: req.body.password,  // on enregistre le hash dans le paramètre password
+        isAdmin: req.body.isAdmin // on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
+    });
+    user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
+                .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
+                .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
+}; */
+
+
+//////////////////////////
+
 /* LOGIN */
-exports.login = (req, res, next) => {
+/* exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email }) //on recherche l' seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
         .then(user => {// on doit vérifier si on a récupéré un user ou non
             if (!user) { // si non :
@@ -47,4 +79,4 @@ exports.login = (req, res, next) => {
                 .catch(error => res.status(500).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));//pour afficher un problème de connexion à mondoDb 
-};
+}; */

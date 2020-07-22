@@ -1,14 +1,10 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+//const Article = require('../models/Article'); // récupération du modèle article ???????
+//'use strict';//??
+//const { Sequelize, DataTypes, Model } = require('sequelize');
+//const sequelize = new Sequelize('mysql::memory');//????????????
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+
     static associate(models) {
       models.User.hasMany(models.Article)// define association here
     }
@@ -24,3 +20,37 @@ module.exports = (sequelize, DataTypes) => {
   });
   return User;
 };
+
+
+
+//////////
+
+/* const { Sequelize, DataTypes, Model } = require('sequelize');
+const sequelize = new Sequelize('mysql::memory');
+
+class User extends Model {}
+
+User.init({
+  // Model attributes are defined here
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING
+    // allowNull defaults to true
+  },
+  password: {
+    type: DataTypes.STRING
+    // allowNull defaults to true
+  },
+  isAdmin: {
+    type: DataTypes.BOOLEAN
+    // allowNull defaults to true
+  }
+}, {
+  // Other model options go here
+  tableName: "users",
+  sequelize, // We need to pass the connection instance
+  modelName: 'User' // We need to choose the model name
+}); */

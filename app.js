@@ -2,8 +2,8 @@ const express = require('express'); // on importe express
 const app = express(); // création d'une application express
 const { Sequelize } = require('sequelize');// on récupère sequelize
 const bodyParser = require('body-parser');// on récupère le bodyparser
-const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
-require('dotenv').config() /*On récupère les variables d'environnement */
+//const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
+//require('dotenv').config() /*On récupère les variables d'environnement */
 
 //const articleRoutes = require('./routes/article'); // on récupère les routes pour les articles
 const userRoutes = require('./routes/user'); // on récupère les routes pour user
@@ -19,15 +19,14 @@ const sequelize = new Sequelize('groupomania', 'root', 'root',{ // 'database', '
 	dialect: 'mysql'
 });
 
-
 sequelize.authenticate()
   .then(() => console.log('Connection has been established successfully.'))
   .catch((err) => console.log('Unable to connect to the database:', err));
 
  
 
-/* CROSS ORIGIN RESOURCE SHARING */
-app.use((req, res, next) => {
+/*CROSS ORIGIN RESOURCE SHARING */
+ app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*'); //l'origine qui a le droit d'accéder à notre api = tout le monde
 	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-with, Content, Accept, Content-Type, Authorization'); //on autorise certains headers
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS'); // on autorise certaines méthodes
@@ -35,12 +34,12 @@ app.use((req, res, next) => {
 }); 
 
 /* BODY PARSER */
-app.use(bodyParser.urlencoded({ extended: true })); // on applique une fonction du body parser qui nous servira pour express mongo sanitize
+//app.use(bodyParser.urlencoded({ extended: true })); // on applique une fonction du body parser qui nous servira pour express mongo sanitize
 app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui va transformer le corps des requêtes en objets JSON
 //app.use(mongoSanitize()); // MONGO SANITIZE !!!!!! to remove prohibed characters
 
 /* HELMET */
-app.use(helmet());
+//app.use(helmet());
 
 /* CHEMIN D'ACCES DES ENDPOINTS */
 
