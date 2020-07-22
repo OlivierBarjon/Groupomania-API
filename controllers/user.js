@@ -1,13 +1,16 @@
 //const User = require('../models/UserOLD'); // récupération du modèle user OLD
-const User = require('../models/User');// récupération du modèle user
+const UserModelBuilder = require('../models/User');// récupération du modèle user
 const bcrypt = require('bcrypt'); // récupération de bcrypt
 //const jwt = require('jsonwebtoken'); // récupération de JWT
-
+const sequelize = require('../database.js');
 
 /* ### LOGIQUE MÉTIER ### */
 
 /* SIGNUP */
 exports.signup = (req, res, next) => {
+    //console.log(req.get("sequelize"));
+    const User = UserModelBuilder(sequelize);
+    //console.log(User);
     bcrypt.hash(req.body.password, 10) // on hash le mot de passe (on exécute 10 fois l'algo pour crypter correctement le mot de passe)
         .then(hash => {// on récupère le hash du mdp (c'est une promise) 
             const user = new User({ // on crée le nouveau utilisateur avec le modèle sequelize
@@ -20,8 +23,9 @@ exports.signup = (req, res, next) => {
                 .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
                 .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
         })
-        .catch(error => res.status(500).json({ error : "erreur signup" }));
+        .catch(error =>console.log(error) || res.status(500).json({ error : "erreur signup" }));
 };
+
 
 /* exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10) // on hash le mot de passe (on exécute 10 fois l'algo pour crypter correctement le mot de passe)

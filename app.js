@@ -1,6 +1,7 @@
 const express = require('express'); // on importe express
 const app = express(); // création d'une application express
 const { Sequelize } = require('sequelize');// on récupère sequelize
+
 const bodyParser = require('body-parser');// on récupère le bodyparser
 //const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
 //require('dotenv').config() /*On récupère les variables d'environnement */
@@ -14,14 +15,15 @@ const userRoutes = require('./routes/user'); // on récupère les routes pour us
 
 /* SEQUELIZE */
 
-const sequelize = new Sequelize('groupomania', 'root', 'root',{ // 'database', 'username', 'password'
+/* const sequelize = new Sequelize('groupomania', 'root', 'root',{ // 'database', 'username', 'password'
 	host: 'localhost',
 	dialect: 'mysql'
 });
+console.log(sequelize);
 
 sequelize.authenticate()
   .then(() => console.log('Connection has been established successfully.'))
-  .catch((err) => console.log('Unable to connect to the database:', err));
+  .catch((err) => console.log('Unable to connect to the database:', err)); */
 
  
 
@@ -46,7 +48,8 @@ app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui v
 //app.use('/api/article', articleRoutes);// 
 app.use('/api/auth', userRoutes);
 //app.use('/images', express.static(path.join(__dirname, 'images'))) // on veut que cette requête serve le dossier statique /image dont l'adresse est déterminé par la méthode path.join (avec __dirname = nom du dossier dans lequel on va se trouver auquel on va ajouter "images" ?????????????????????????????????????????????????????????
-
+// app.use authentification une fois la base de donnée appellée
 // EXPORT SERVER
 
 module.exports = app; // export de l'application express (pour le serveur node.js)
+
