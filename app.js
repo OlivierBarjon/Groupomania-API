@@ -4,7 +4,7 @@ const { Sequelize } = require('sequelize');// on récupère sequelize
 
 const bodyParser = require('body-parser');// on récupère le bodyparser
 const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
-//require('dotenv').config() /*On récupère les variables d'environnement */
+
 
 //const articleRoutes = require('./routes/article'); // on récupère les routes pour les articles
 const userRoutes = require('./routes/user'); // on récupère les routes pour user

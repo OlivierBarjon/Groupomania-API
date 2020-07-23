@@ -1,6 +1,6 @@
 const http = require('http'); // récupération du package http de node.js
 const app = require('./app'); // récupération de l'application express
-
+require('dotenv').config() // On récupère les variables d'environnement
 
 /* NORMALIZE PORT */
 // la fonction normalizePort renvoie un port valide
@@ -16,7 +16,7 @@ const normalizePort = val => {
   return false;
 };
 
-//console.log(process.env); // LISTES VARIABLES ENVIRONNEMENT POUR TEST
+
 const port = normalizePort(process.env.PORT || '3000'); // port 3000 ou port défini par l'environnement
 app.set('port', port); // assignation du port à l'application express
 

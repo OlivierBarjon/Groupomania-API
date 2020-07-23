@@ -1,4 +1,3 @@
-//const User = require('../models/UserOLD'); // récupération du modèle user OLD
 const UserModelBuilder = require('../models/User');// récupération du modèle user
 const bcrypt = require('bcrypt'); // récupération de bcrypt
 //const jwt = require('jsonwebtoken'); // récupération de JWT
@@ -25,36 +24,6 @@ exports.signup = (req, res, next) => {
         })
         .catch(error =>console.log(error) || res.status(500).json({ error : "erreur signup" }));
 };
-
-
-/* exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10) // on hash le mot de passe (on exécute 10 fois l'algo pour crypter correctement le mot de passe)
-        .then(hash => {// on récupère le hash du mdp (c'est une promise) 
-            const user = new User({ // on crée le nouveau utilisateur avec le modèle sequelize
-                username: req.body.username,
-                email: req.body.email, // on enregistre l'email du body dans le paramètre email
-                password: hash,  // on enregistre le hash dans le paramètre password
-                isAdmin: req.body.isAdmin // on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
-            });
-            user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
-                .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
-                .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
-        })
-        .catch(error => res.status(500).json({ error : "erreur signup" }));
-}; */
-
-////////////////////////////
-/* exports.signup = (req, res, next) => {
-    const user = new User({ // on crée le nouveau utilisateur avec le modèle sequelize
-        username: req.body.username,
-        email: req.body.email, // on enregistre l'email du body dans le paramètre email
-        password: req.body.password,  // on enregistre le hash dans le paramètre password
-        isAdmin: req.body.isAdmin // on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
-    });
-    user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
-                .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
-                .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
-}; */
 
 
 //////////////////////////

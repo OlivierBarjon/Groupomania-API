@@ -1,7 +1,6 @@
-//const Article = require('../models/Article'); // récupération du modèle article ???????
-//'use strict';//??
+
 const { Sequelize, DataTypes, Model } = require('sequelize');
-//const sequelize = new Sequelize('mysql::memory');//????????????
+
 module.exports = (sequelize) => {
   class User extends Model {
 
