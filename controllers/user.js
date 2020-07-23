@@ -1,6 +1,6 @@
 const UserModelBuilder = require('../models/User');// récupération du modèle user
 const bcrypt = require('bcrypt'); // récupération de bcrypt
-//const jwt = require('jsonwebtoken'); // récupération de JWT
+const jwt = require('jsonwebtoken'); // récupération de JWT
 const sequelize = require('../database.js');
 
 /* ### LOGIQUE MÉTIER ### */
@@ -28,9 +28,10 @@ exports.signup = (req, res, next) => {
 
 //////////////////////////
 
-/* LOGIN */
-/* exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email }) //on recherche l' seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
+/* SIGNIN (LOGIN) */
+exports.signin = (req, res, next) => {
+    const User = UserModelBuilder(sequelize);
+    User.findOne({ email: req.body.email }) //on recherche le seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
         .then(user => {// on doit vérifier si on a récupéré un user ou non
             if (!user) { // si non :
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -40,10 +41,10 @@ exports.signup = (req, res, next) => {
                     if (!valid) {
                         return res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
-                    res.status(200).json({ // si c'est "valid" = true, on renvoi un objet json 
-                        userId: user._id, // avec l'identifiant
+                    res.status(200).json({ // si c'est "valid" = true, on renvoi un objet json
+                        userId: user.id, // avec l'identifiant
                         token: jwt.sign( // et avec un token (grâce à l'appel de la fonction sign de jwt) qui servira pour les requêtes suivantes
-                            { userId: user._id }, //arg 1 = le payload (les données qu'on veut encoder dans le token)=l'id du user
+                            { userId: user.id }, //arg 1 = le payload (les données qu'on veut encoder dans le token)=l'id du user
                             process.env.TOKEN_KEY, // clé secrète
                             { expiresIn: '24h' } //durée de vie
                         )
@@ -51,5 +52,5 @@ exports.signup = (req, res, next) => {
                 })
                 .catch(error => res.status(500).json({ error }));
         })
-        .catch(error => res.status(500).json({ error }));//pour afficher un problème de connexion à mondoDb 
-}; */
+        .catch(error => res.status(500).json({ error }));//pour afficher un problème de connexion 
+};
