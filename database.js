@@ -4,7 +4,7 @@ const sequelize = new Sequelize('groupomania', 'root', 'root',{ // 'database', '
 	host: 'localhost',
 	dialect: 'mysql'
 });
-//console.log(sequelize);
+//console.log(sequelize); // TEST
 
 sequelize.authenticate()
   .then(() => console.log('Connection has been established successfully.'))

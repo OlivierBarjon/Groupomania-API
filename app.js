@@ -48,7 +48,9 @@ app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui v
 //app.use('/api/article', articleRoutes);// 
 app.use('/api/auth', userRoutes);
 //app.use('/images', express.static(path.join(__dirname, 'images'))) // on veut que cette requête serve le dossier statique /image dont l'adresse est déterminé par la méthode path.join (avec __dirname = nom du dossier dans lequel on va se trouver auquel on va ajouter "images" ?????????????????????????????????????????????????????????
+
 // app.use authentification une fois la base de donnée appellée
+
 // EXPORT SERVER
 
 module.exports = app; // export de l'application express (pour le serveur node.js)
