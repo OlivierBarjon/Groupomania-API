@@ -3,7 +3,7 @@ const app = express(); // création d'une application express
 const { Sequelize } = require('sequelize');// on récupère sequelize
 
 const bodyParser = require('body-parser');// on récupère le bodyparser
-//const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
+const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
 //require('dotenv').config() /*On récupère les variables d'environnement */
 
 //const articleRoutes = require('./routes/article'); // on récupère les routes pour les articles
@@ -11,21 +11,6 @@ const userRoutes = require('./routes/user'); // on récupère les routes pour us
 //const path = require('path'); // on récupère l'élément de node.js permettant d'accéder au chemin de notre systeme de fichiers
 //const { Server } = require('http');
 
-
-
-/* SEQUELIZE */
-
-/* const sequelize = new Sequelize('groupomania', 'root', 'root',{ // 'database', 'username', 'password'
-	host: 'localhost',
-	dialect: 'mysql'
-});
-console.log(sequelize);
-
-sequelize.authenticate()
-  .then(() => console.log('Connection has been established successfully.'))
-  .catch((err) => console.log('Unable to connect to the database:', err)); */
-
- 
 
 /*CROSS ORIGIN RESOURCE SHARING */
  app.use((req, res, next) => {
@@ -41,7 +26,7 @@ app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui v
 //app.use(mongoSanitize()); // MONGO SANITIZE !!!!!! to remove prohibed characters
 
 /* HELMET */
-//app.use(helmet());
+app.use(helmet());
 
 /* CHEMIN D'ACCES DES ENDPOINTS */
 
