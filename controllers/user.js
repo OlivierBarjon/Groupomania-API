@@ -1,7 +1,7 @@
 const UserModelBuilder = require('../models/User');// récupération du modèle user
 const bcrypt = require('bcrypt'); // récupération de bcrypt
 const jwt = require('jsonwebtoken'); // récupération de JWT
-const sequelize = require('../database.js');
+const sequelize = require('../database.js'); // récupération de la base de donnée
 
 /* ### LOGIQUE MÉTIER ### */
 
@@ -20,13 +20,11 @@ exports.signup = (req, res, next) => {
             });
             user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
                 .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
-                .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
+                .catch(error => res.status(500).json({ message: 'Cette adresse mail ou ce nom d\'utilisateur semble être déjà utilisé' }));
         })
         .catch(error =>console.log(error) || res.status(500).json({ error : "erreur signup" }));
 };
 
-
-//////////////////////////
 
 /* SIGNIN (LOGIN) */
 exports.signin = (req, res, next) => {
