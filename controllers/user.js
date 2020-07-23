@@ -16,11 +16,11 @@ exports.signup = (req, res, next) => {
                 username: req.body.username,
                 email: req.body.email, // on enregistre l'email du body dans le paramètre email
                 password: hash,  // on enregistre le hash dans le paramètre password
-                isAdmin: req.body.isAdmin // on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
+                //isAdmin: req.body.isAdmin // ??????? / on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
             });
             user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
                 .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
-                .catch(error => res.status(500).json({ message: 'Cette adresse mail ou ce nom d\'utilisateur semble être déjà utilisé' }));
+                .catch(error => res.status(500).json({ message: 'Cette adresse mail et\\ou ce nom d\'utilisateur semble être déjà utilisé' }));
         })
         .catch(error =>console.log(error) || res.status(500).json({ error : "erreur signup" }));
 };
@@ -29,7 +29,7 @@ exports.signup = (req, res, next) => {
 /* SIGNIN (LOGIN) */
 exports.signin = (req, res, next) => {
     const User = UserModelBuilder(sequelize);
-    User.findOne({ email: req.body.email }) //on recherche le seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
+    User.findOne({ where: {email: req.body.email} }) //on recherche le seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
         .then(user => {// on doit vérifier si on a récupéré un user ou non
             if (!user) { // si non :
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -50,5 +50,5 @@ exports.signin = (req, res, next) => {
                 })
                 .catch(error => res.status(500).json({ error }));
         })
-        .catch(error => res.status(500).json({ error }));//pour afficher un problème de connexion 
+        .catch(error => res.status(500).json({ error : "erreur signin" }));//pour afficher un problème de connexion 
 };
