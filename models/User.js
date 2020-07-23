@@ -9,9 +9,21 @@ module.exports = (sequelize) => {
     }
   };
   User.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      isEmail: true // respect du format email)
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     isAdmin: DataTypes.BOOLEAN
   }, {
     sequelize,
