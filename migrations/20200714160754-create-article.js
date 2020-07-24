@@ -12,23 +12,23 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      content: {
+      text: {
         allowNull: false,
         type: Sequelize.STRING
       },
       idUSERS:{
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER,
         references:{
           model:'Users',
           key:'id'
         }
       },
-      imageUrl: {
-        allowNull: false,
+      file: {
+        allowNull: true,
         type: Sequelize.STRING
       },
-      likes: {
+      /* likes: {
         type: Sequelize.INTEGER
       },
       dislikes: {
@@ -39,7 +39,7 @@ module.exports = {
       },
       usersDisliked: {
         type: Sequelize.STRING
-      },
+      }, */
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

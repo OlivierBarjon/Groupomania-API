@@ -1,11 +1,24 @@
-const Article = require('../models/Article'); // récupération du modèle
-const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
-
+const ArticleModelBuilder = require('../models/Article');// récupération du modèle article
+//const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
+const sequelize = require('../database.js'); // récupération de la base de donnée
 
 /* ### LOGIQUE MÉTIER ### */
 
 /*POST */
 exports.createArticle = (req, res, next) => {
+  //console.log(req.get("sequelize"));
+  const Article = ArticleModelBuilder(sequelize);
+  //console.log(Article);
+  const articleObject = req.body; // on extrait l'objet JSON de notre req.body
+  const article = new Article({ // on crée une instance de notre classe Sauce
+    ...articleObject,
+    //imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // le front end ne connaissant pas l'url de l'image (c'est le middleware multer qui le génère), il faut le définir manuellement dans un template littéral : protocol, host du serveur (la racine du serveur ou localhost:3000), répertoire, nom du fichier.
+  });
+  article.save()
+    .then(() => res.status(201).json({ message: 'Article enregistrée' }))
+    .catch(error => res.status(400).json({ error : "erreur createArticle" }));
+};
+/* exports.createArticle = (req, res, next) => {
   const articleObject = JSON.parse(req.body.article); // on extrait l'objet JSON de notre req.body.article (qui est un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
   delete articleObject._id; // on enlève l'id de articleObject
   const article = new Article({ // on crée une instance de notre classe Sauce
@@ -15,7 +28,7 @@ exports.createArticle = (req, res, next) => {
   article.save()
     .then(() => res.status(201).json({ message: 'Article enregistrée' }))
     .catch(error => res.status(400).json({ error }));
-};
+}; */
 
 
 /* POST LIKE */
