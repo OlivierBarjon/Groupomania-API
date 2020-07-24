@@ -11,7 +11,10 @@ exports.createArticle = (req, res, next) => {
   //console.log(Article);
   const articleObject = req.body; // on extrait l'objet JSON de notre req.body
   const article = new Article({ // on crée une instance de notre classe Sauce
-    ...articleObject,
+    title : req.body.title,
+    text : req.body.text,
+    file : req.body.file,
+    idUSERS : req.body.userId
     //imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // le front end ne connaissant pas l'url de l'image (c'est le middleware multer qui le génère), il faut le définir manuellement dans un template littéral : protocol, host du serveur (la racine du serveur ou localhost:3000), répertoire, nom du fichier.
   });
   article.save()
