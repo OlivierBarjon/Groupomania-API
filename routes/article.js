@@ -8,7 +8,7 @@ const multer = require('../middleware/multer-config'); // on récupère le middl
 /* ### ROUTES ### */
 
 /* POST */
-router.post ('/', auth,/* multer, */ articleCtrl.createArticle); // on applique la logique métier createArticle du controleur à la route POST
+router.post ('/', auth, multer, articleCtrl.createArticle); // on applique la logique métier createArticle du controleur à la route POST
 
 /* POST LIKE */
 router.post('/:id/like', /* auth, */ articleCtrl.postLike); // on applique la logique métier postLike du controleur à la route POST LIKE
