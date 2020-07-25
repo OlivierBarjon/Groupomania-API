@@ -9,11 +9,11 @@ exports.createArticle = (req, res, next) => {
   //console.log(req.get("sequelize"));
   const Article = ArticleModelBuilder(sequelize);
   //console.log(Article);
-  //const articleObject = JSON.parse(req.body.article); // on extrait l'objet JSON de notre req.body.article
+  const articleObject = JSON.parse(req.body.article); // on extrait l'objet JSON de notre req.body.article
   const article = new Article({ // on crée une instance de notre classe Sauce
-    idUSERS : req.body.userId,
-    title : req.body.title,
-    text : req.body.text,
+    idUSERS : articleObject.userId,
+    title : articleObject.title,
+    text : articleObject.text,
     file : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
   article.save()
