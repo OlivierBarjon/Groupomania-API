@@ -52,3 +52,41 @@ exports.signin = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error : "erreur signin" }));//pour afficher un problème de connexion 
 };
+
+
+/* DELETE USER */
+
+/* exports.deleteUser = (req, res, next) => {
+
+    const User = UserModelBuilder(sequelize);
+
+    User.findOne({ where: {email: req.body.email} })
+      .then( 
+          User.destroy({ where: {email: req.body.email} })
+            .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
+            .catch(error => res.status(400).json({ error })) 
+      )
+      .catch(error => res.status(500).json({ error }));
+
+  }; */
+
+  exports.deleteUser = (req, res, next) => {
+    const User = UserModelBuilder(sequelize);
+    User.findOne({ where: {email: req.body.email} }) //on recherche le seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
+        .then(user => {// on doit vérifier si on a récupéré un user ou non
+            if (!user) { // si non :
+                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+            }
+            bcrypt.compare(req.body.password, user.password) // si oui, on utilise la méthode compare de bcrypt pour comparer le mdp envoyé et le hash de la bdd
+                .then(valid => { // on recoit un boolean 
+                    if (!valid) {
+                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                    }
+                    User.destroy({ where: {email: req.body.email} }) // si c'est "valid" = true, on supprime l'utilisateur
+                        .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
+                        .catch(error => res.status(400).json({ error }));
+                })
+                .catch(error => res.status(500).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error :"suppression impossible"  }));
+};
