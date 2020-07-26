@@ -16,11 +16,20 @@ router.post ('/', auth, multer, articleCtrl.createArticle); // on applique la lo
 /* GET */
 router.get('/', auth, articleCtrl.getAllArticle); // on applique la logique métier getAllArticle du controleur à la route GET
 
+/* GET 3 (HOME PAGE) */
+router.get('/home', auth, articleCtrl.get3Articles); // on applique la logique métier get3Articles du controleur à la route GET
+
+/* GET SELECTION */
+router.get('/selection', auth, articleCtrl.getSelection); // on applique la logique métier get3Articles du controleur à la route GET
+
 /* GET ONE */
 router.get('/:id', auth,  articleCtrl.getOneArticle); // on applique la logique métier getOneArticle du controleur à la route GET (ID)
 
 /* PUT */
 router.put('/:id', auth, multer, articleCtrl.modifyArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
+
+/* PUT MODERATEUR */
+router.put('/select/:id', auth, multer, articleCtrl.selectArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
 
 /* DELETE */
 router.delete('/:id', auth,  articleCtrl.deleteArticle); // on applique la logique métier deleteArticle du controleur à la route DELETE

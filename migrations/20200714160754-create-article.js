@@ -28,6 +28,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING
       },
+      selection: {
+        defaultValue: false,
+        type: Sequelize.BOOLEAN
+      },
       /* likes: {
         type: Sequelize.INTEGER
       },

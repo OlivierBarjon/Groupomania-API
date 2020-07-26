@@ -107,6 +107,21 @@ exports.getOneArticle = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 };
 
+/* GET 3 (HOME PAGE) */
+exports.get3Articles = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  Article.findAll({limit:3})// récuparation de la liste complète des articles
+    .then(articles => res.status(200).json(articles))
+    .catch(error => res.status(400).json({ error : "gettallarticle" }));
+};
+
+/* GET 3 (HOME PAGE) */
+exports.getSelection = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  Article.findAll({ where:{ selection : true } })// récuparation de la liste complète des articles
+    .then(articles => res.status(200).json(articles))
+    .catch(error => res.status(400).json({ error : "gettallarticle" }));
+};
 
 /* PUT */
 exports.modifyArticle = (req, res, next) => {
@@ -126,6 +141,23 @@ exports.modifyArticle = (req, res, next) => {
             .then(() => res.status(200).json({ message: 'Article et image modifié' }))
             .catch(error => res.status(400).json({ error }));
         });
+      }).catch(error => res.status(400).json({ error }))
+};
+
+
+/* PUT MODERATEUR */
+exports.selectArticle = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+    const articleObject = JSON.parse(req.body.article);
+  
+    Article.findOne({ where:{ id: req.params.id } })
+      .then(() => { 
+          Article.update({ 
+            selection : articleObject.selection, 
+          },{ where:{ id: req.params.id } }) //mise à jour d'un article
+            .then(() => res.status(200).json({ message: 'Article modif selection' }))
+            .catch(error => res.status(400).json({ error }));
+        
       }).catch(error => res.status(400).json({ error }))
 };
 

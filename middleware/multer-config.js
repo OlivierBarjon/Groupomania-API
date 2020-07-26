@@ -5,7 +5,8 @@ const multer = require('multer'); // on récupère le package multer
 const MIME_TYPES = { //on crée un objet qui nous permettra de lister les extensions par rapport aux mime-types des fichiers envoyés (en JS on a pas accès au extensions, seulement au mime-types)
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
-    'image/png': 'png'
+    'image/png': 'png',
+    'image/gif':'gif'
 };
 
 const storage = multer.diskStorage({ // on crée un objet de configuration pour multer grâce à sa fonction diskStorage afin de lui dire qu'on va enregistrer les images sur le disque
@@ -19,9 +20,9 @@ const storage = multer.diskStorage({ // on crée un objet de configuration pour 
     }
 });
 
-const fileFilter = (req, file, callback) => {// on crée un filtre sur les fichiers de type "jpg", "jpeg" ou "png"
+const fileFilter = (req, file, callback) => {// on crée un filtre sur les fichiers de type "jpg", "jpeg" ou "png" ou "gif"
     const extension = MIME_TYPES[file.mimetype]; 
-    if (extension === 'jpg' || extension === 'png') {
+    if (extension === 'jpg' || extension === 'png' || extension === 'gif') {
         callback (null, true);
         
     } else {
