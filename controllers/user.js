@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt'); // récupération de bcrypt
 const jwt = require('jsonwebtoken'); // récupération de JWT
 const sequelize = require('../database.js'); // récupération de la base de donnée
 
+const fs = require('fs'); //package de suppression des fichiers
+const ArticleModelBuilder = require('../models/Article');// récupération du modèle article
+
 /* ### LOGIQUE MÉTIER ### */
 
 /* SIGNUP */
@@ -56,22 +59,10 @@ exports.signin = (req, res, next) => {
 
 /* DELETE USER */
 
-/* exports.deleteUser = (req, res, next) => {
-
-    const User = UserModelBuilder(sequelize);
-
-    User.findOne({ where: {email: req.body.email} })
-      .then( 
-          User.destroy({ where: {email: req.body.email} })
-            .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
-            .catch(error => res.status(400).json({ error })) 
-      )
-      .catch(error => res.status(500).json({ error }));
-
-  }; */
 
   exports.deleteUser = (req, res, next) => {
     const User = UserModelBuilder(sequelize);
+    const Article = ArticleModelBuilder(sequelize);
     User.findOne({ where: {email: req.body.email} }) //on recherche le seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
         .then(user => {// on doit vérifier si on a récupéré un user ou non
             if (!user) { // si non :
@@ -81,12 +72,32 @@ exports.signin = (req, res, next) => {
                 .then(valid => { // on recoit un boolean 
                     if (!valid) {
                         return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                    }else {
+                            ///// On supprime les articles de cet utilisateur
+                            Article.findAll({ where:{ idUSERS: req.body.userId } }) // on recherche les objets 
+                            .then(articles => { // 
+                                //console.log(articles);
+                                 for (let a in articles){
+                                    //console.log(articles[a]);//TEST
+                                    const art = articles[a];
+                                    //console.log(art.dataValues.file);//TEST
+                                    const filename = art.dataValues.file.split('/images/')[1]; //
+                                    console.log(filename); 
+                                    fs.unlink(`images/${filename}`, () => { // suppression de l'image et de l'article
+                                        Article.destroy({ where:{ id: art.dataValues.id } }) // 
+                                        .then(() => res.status(200).json({ message: 'Article supprimé !' }))
+                                        .catch(error => res.status(400).json({ error : 'articledestroy' }));
+                                    });
+                                };
+                            })
+                            .catch(error => res.status(500).json({ error : "pas d'article trouvé articlefindall" }));
+                            //////// On supprime l'utilisateur
+                            User.destroy({ where: {email: req.body.email} }) 
+                                .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
+                                .catch(error => res.status(400).json({ error : "userdestroy" })); 
                     }
-                    User.destroy({ where: {email: req.body.email} }) // si c'est "valid" = true, on supprime l'utilisateur
-                        .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
-                        .catch(error => res.status(400).json({ error }));
                 })
                 .catch(error => res.status(500).json({ error }));
         })
-        .catch(error => res.status(500).json({ error :"suppression impossible"  }));
+        .catch(error => res.status(500).json({ error :"suppression impossible userfindone"  }));
 };

@@ -24,7 +24,7 @@ exports.createArticle = (req, res, next) => {
 
 
 /* POST LIKE */
-exports.postLike = (req, res, next) => {
+/* exports.postLike = (req, res, next) => {
   const like = req.body.like;
   const userId = req.body.userId;
 
@@ -87,7 +87,7 @@ exports.postLike = (req, res, next) => {
       .then(() => res.status(200).json({ message: 'dislike ajouté' }))
       .catch((error) => res.status(400).json({ error }))
   };
-};
+}; */
 
 
 /* GET */
@@ -95,11 +95,11 @@ exports.getAllArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
   Article.findAll()// récuparation de la liste complète des articles
     .then(articles => res.status(200).json(articles))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => res.status(400).json({ error : "gettallarticle" }));
 };
 
 
-/* GET ONE SAUCE */
+/* GET ONE */
 exports.getOneArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
   Article.findOne({ where:{ id: req.params.id } }) // récupération d'un article unique
