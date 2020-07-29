@@ -1,6 +1,7 @@
 const ArticleModelBuilder = require('../models/Article');// récupération du modèle article
 const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
 const sequelize = require('../database.js'); // récupération de la base de donnée
+const User = require('../models/User');
 
 /* ### LOGIQUE MÉTIER ### */
 
@@ -91,11 +92,20 @@ exports.createArticle = (req, res, next) => {
 
 
 /* GET */
-exports.getAllArticle = (req, res, next) => {
+/* exports.getAllArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  Article.findAll()// récuparation de la liste complète des articles
+  Article.findAll({order: sequelize.col('createdAt')})// récuparation de la liste complète des articles en incluant l'user
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error : "gettallarticle" }));
+
+}; */
+
+exports.getAllArticle = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  Article.findAndCountAll({order: sequelize.col('createdAt')})// récuparation de la liste complète des articles en incluant l'user
+    .then(articles => res.status(200).json(articles))
+    .catch(error => res.status(400).json({ error : "gettallarticle" }));
+
 };
 
 
@@ -115,7 +125,7 @@ exports.get3Articles = (req, res, next) => {
     .catch(error => res.status(400).json({ error : "gettallarticle" }));
 };
 
-/* GET 3 (HOME PAGE) */
+/* GET SELECTION (HOME PAGE) */
 exports.getSelection = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
   Article.findAll({ where:{ selection : true } })// récuparation de la liste complète des articles

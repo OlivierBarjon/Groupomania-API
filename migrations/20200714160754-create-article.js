@@ -25,7 +25,7 @@ module.exports = {
         }
       },
       file: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING
       },
       selection: {
