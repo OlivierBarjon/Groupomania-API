@@ -63,7 +63,7 @@ exports.signin = (req, res, next) => {
   exports.deleteUser = (req, res, next) => {
     const User = UserModelBuilder(sequelize);
     const Article = ArticleModelBuilder(sequelize);
-    User.findOne({ where: {email: req.body.email} }) //on recherche le seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
+    User.findOne({ where: {id: req.body.userId, email: req.body.email } }) //on recherche le seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête)
         .then(user => {// on doit vérifier si on a récupéré un user ou non
             if (!user) { // si non :
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });

@@ -1,7 +1,9 @@
 const ArticleModelBuilder = require('../models/Article');// récupération du modèle article
+const UserModelBuilder = require('../models/User');
 const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
 const sequelize = require('../database.js'); // récupération de la base de donnée
 const User = require('../models/User');
+const { models } = require('../database.js');
 
 /* ### LOGIQUE MÉTIER ### */
 
@@ -112,7 +114,7 @@ exports.getAllArticle = (req, res, next) => {
 /* GET ONE */
 exports.getOneArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  Article.findOne({ where:{ id: req.params.id } }) // récupération d'un article unique
+  Article.findOne({ where:{ id: req.params.id }, attributes : ['title', 'text', 'file', 'idUsers'], include: [{model: models.User, as: 'ProfileUser', attributes:['id', 'username', 'isAdmin']}] }) // récupération d'un article unique
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error }));
 };
