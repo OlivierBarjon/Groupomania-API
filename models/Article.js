@@ -12,6 +12,11 @@ module.exports = (sequelize) => {
         }
       })
       /////
+      /* models.Article.hasOne(models.User,{
+        foreignKey: {
+          allowNull: false
+        }
+      }) */
     }
   };
 
