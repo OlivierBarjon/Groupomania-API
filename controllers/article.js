@@ -1,6 +1,7 @@
 const ArticleModelBuilder = require('../models/Article');// récupération du modèle article
-//const UserModelBuilder = require('../models/User');
+const UserModelBuilder = require('../models/User');
 //const User = require('../models/User');
+
 const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
 const sequelize = require('../database.js'); // récupération de la base de donnée
 
@@ -97,7 +98,7 @@ exports.createArticle = (req, res, next) => {
 /* GET */
 exports.getAllArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({order: sequelize.col('createdAt')})// récuparation de la liste complète des articles en incluant l'user
+  Article.findAll({order: sequelize.literal('(updatedAt) DESC')}) // ordonné par ordre de mise à jour inverse
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error : "gettallarticle" }));
 
@@ -115,9 +116,11 @@ exports.getAllArticle = (req, res, next) => {
 /* GET ONE */
 exports.getOneArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  //const User = UserModelBuilder(sequelize);
+  const User = UserModelBuilder(sequelize);
+  console.log(models.User);
+  console.log(models.Article);
   //raw SQL : SELECT * FROM articles JOIN users;
-  Article.findOne({ where:{ id: req.params.id }, attributes : ['title', 'text', 'file', 'idUsers'], include: [{all:true}]  }) // récupération d'un article unique
+  Article.findOne({ where:{ id: req.params.id }, attributes : ['title', 'text', 'file', 'idUsers'] , include: User}) // récupération d'un article unique
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error }));
 };
@@ -125,7 +128,7 @@ exports.getOneArticle = (req, res, next) => {
 /* GET 3 (HOME PAGE) */
 exports.get3Articles = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({limit:3})// récuparation de la liste complète des articles
+  Article.findAll({limit:4, order: sequelize.literal('(updatedAt) DESC')})// récuparation de la liste complète des articles
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error : "gettallarticle" }));
 };
@@ -133,7 +136,7 @@ exports.get3Articles = (req, res, next) => {
 /* GET SELECTION (HOME PAGE) */
 exports.getSelection = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({ where:{ selection : true } })// récuparation de la liste complète des articles
+  Article.findAll({ where:{ selection : true }, order: sequelize.random() })// récuparation de la liste complète des articles
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error : "gettallarticle" }));
 };

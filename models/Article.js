@@ -7,16 +7,8 @@ module.exports = (sequelize) => {
     static associate(models) {
       // define association here
       models.Article.belongsTo(models.User,{
-        foreignKey: {
-          allowNull: false
-        }
+        foreignKey: 'id'
       })
-      /////
-      /* models.Article.hasOne(models.User,{
-        foreignKey: {
-          allowNull: false
-        }
-      }) */
     }
   };
 

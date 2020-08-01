@@ -6,7 +6,9 @@ module.exports = (sequelize) => {
   class User extends Model {
 
     static associate(models) {
-      models.User.hasMany(models.Article)// define association here
+      models.User.hasMany(models.Article,{
+        foreignKey: 'idUSERS'
+      })// define association here
     }
   };
   User.init({
