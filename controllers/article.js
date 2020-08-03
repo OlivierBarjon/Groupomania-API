@@ -128,7 +128,7 @@ exports.getOneArticle = (req, res, next) => {
 /* GET 3 (HOME PAGE) */
 exports.get3Articles = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({limit:4, order: sequelize.literal('(updatedAt) DESC')})// récuparation de la liste complète des articles
+  Article.findAll({limit:3, order: sequelize.literal('(createdAt) DESC')})// récuparation de la liste complète des articles
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error : "gettallarticle" }));
 };
