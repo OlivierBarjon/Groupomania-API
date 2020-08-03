@@ -120,7 +120,7 @@ exports.getOneArticle = (req, res, next) => {
   console.log(models.User);
   console.log(models.Article);
   //raw SQL : SELECT * FROM articles JOIN users;
-  Article.findOne({ where:{ id: req.params.id }, attributes : ['title', 'text', 'file', 'idUsers'] , include: User}) // récupération d'un article unique
+  Article.findOne({ where:{ id: req.params.id }, include: [{all:true}]  }) // récupération d'un article unique
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error }));
 };
@@ -166,12 +166,11 @@ exports.modifyArticle = (req, res, next) => {
 /* PUT MODERATEUR */
 exports.selectArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-    const articleObject = JSON.parse(req.body.article);
-  
+  //console.log(req.body);//TEST
     Article.findOne({ where:{ id: req.params.id } })
       .then(() => { 
           Article.update({ 
-            selection : articleObject.selection, 
+            selection : req.body.selection, 
           },{ where:{ id: req.params.id } }) //mise à jour d'un article
             .then(() => res.status(200).json({ message: 'Article modif selection' }))
             .catch(error => res.status(400).json({ error }));

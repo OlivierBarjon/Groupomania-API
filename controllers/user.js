@@ -48,7 +48,8 @@ exports.signin = (req, res, next) => {
                             { userId: user.id }, //arg 1 = le payload (les données qu'on veut encoder dans le token)=l'id du user
                             process.env.TOKEN_KEY, // clé secrète
                             { expiresIn: '24h' } //durée de vie
-                        )
+                        ),
+                        isAdmin : user.isAdmin // L'information à propos du status de modérateur de cet utilisateur
                     });
                 })
                 .catch(error => res.status(500).json({ error }));

@@ -29,7 +29,7 @@ router.get('/:id', auth,  articleCtrl.getOneArticle); // on applique la logique 
 router.put('/:id', auth, multer, articleCtrl.modifyArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
 
 /* PUT MODERATEUR */
-router.put('/select/:id', auth, multer, articleCtrl.selectArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
+router.put('/select/:id', auth, articleCtrl.selectArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
 
 /* DELETE */
 router.delete('/:id', auth,  articleCtrl.deleteArticle); // on applique la logique métier deleteArticle du controleur à la route DELETE
