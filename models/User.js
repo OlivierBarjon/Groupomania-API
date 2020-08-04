@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
 
     static associate(models) {
       models.User.hasMany(models.Article,{
-        foreignKey: 'idUSERS'
+        foreignKey: 'idUSERS'// INUTILE
       })// define association here
     }
   };

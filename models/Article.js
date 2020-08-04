@@ -5,9 +5,10 @@ module.exports = (sequelize) => {
   class Article extends Model {
 
     static associate(models) {
+      //console.log(models);// TEST
       // define association here
       models.Article.belongsTo(models.User,{
-        foreignKey: 'id'
+        foreignKey: 'idUSERS'
       })
     }
   };

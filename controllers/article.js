@@ -110,11 +110,15 @@ exports.getAllArticle = (req, res, next) => {
 exports.getOneArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
   const User = UserModelBuilder(sequelize);
-  console.log(models.User);
-  console.log(models.Article);
+  const models = {Article, User};
+  User.associate(models);
+  Article.associate(models);
   //raw SQL : SELECT * FROM articles JOIN users;
-  Article.findOne({ where:{ id: req.params.id }, include: [{all:true}]  }) // récupération d'un article unique
-    .then(articles => res.status(200).json(articles))
+  Article.findOne({ where:{ id: req.params.id } , include: models.User   }) // récupération d'un article unique en incluant l'user  
+    .then(article => {
+       res.status(200).json(article);
+    }  
+    )
     .catch(error => res.status(400).json({ error }));
 };
 
