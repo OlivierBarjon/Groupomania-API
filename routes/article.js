@@ -20,7 +20,7 @@ router.get('/', auth, articleCtrl.getAllArticle); // on applique la logique mét
 router.get('/home', auth, articleCtrl.get3Articles); // on applique la logique métier get3Articles du controleur à la route GET
 
 /* GET SELECTION */
-router.get('/selection', auth, articleCtrl.getSelection); // on applique la logique métier get3Articles du controleur à la route GET
+router.get('/selection', auth, articleCtrl.getSelection); // on applique la logique métier getSelection du controleur à la route GET
 
 /* GET ONE */
 router.get('/:id', auth,  articleCtrl.getOneArticle); // on applique la logique métier getOneArticle du controleur à la route GET (ID)
@@ -29,7 +29,7 @@ router.get('/:id', auth,  articleCtrl.getOneArticle); // on applique la logique 
 router.put('/:id', auth, multer, articleCtrl.modifyArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
 
 /* PUT MODERATEUR */
-router.put('/select/:id', auth, articleCtrl.selectArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
+router.put('/select/:id', auth, articleCtrl.selectArticle); // on applique la logique métier selectArticle du controleur à la route PUT
 
 /* DELETE */
 router.delete('/:id', auth,  articleCtrl.deleteArticle); // on applique la logique métier deleteArticle du controleur à la route DELETE

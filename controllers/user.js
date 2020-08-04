@@ -84,7 +84,7 @@ exports.signin = (req, res, next) => {
                                     //console.log(art.dataValues.file);//TEST
                                     const filename = art.dataValues.file.split('/images/')[1]; //
                                     console.log(filename); 
-                                    fs.unlink(`images/${filename}`, () => { // suppression de l'image et de l'article
+                                    fs.unlink(`images/${filename}`, () => { // suppression de l'image et de l'article (important)
                                         Article.destroy({ where:{ id: art.dataValues.id } }) // 
                                         .then(() => res.status(200).json({ message: 'Article supprimé !' }))
                                         .catch(error => res.status(400).json({ error : 'articledestroy' }));
@@ -95,10 +95,24 @@ exports.signin = (req, res, next) => {
                             //////// On supprime l'utilisateur
                             User.destroy({ where: {email: req.body.email} }) 
                                 .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
-                                .catch(error => res.status(400).json({ error : "userdestroy" })); 
+                                .catch(error => res.status(400).json({ error })); 
                     }
                 })
                 .catch(error => res.status(500).json({ error }));
         })
-        .catch(error => res.status(500).json({ error :"suppression impossible userfindone"  }));
+        .catch(error => res.status(500).json({ error }));
 };
+
+
+/* GET ONE USER */
+
+exports.getOneUser = (req, res, next) => {
+    const Article = ArticleModelBuilder(sequelize);
+    const User = UserModelBuilder(sequelize);
+    console.log(User);
+    //console.log(models.Article);
+    //raw SQL : SELECT * FROM users WHERE id = X JOIN articles;
+    User.findOne({ where:{ id: req.params.id } }) // récupération d'un user unique // , include : [{model : Article}] 
+      .then(users => res.status(200).json(users))
+      .catch(error => res.status(400).json({ error }));
+  };

@@ -9,7 +9,7 @@ const helmet = require('helmet'); // on récupère Helmet (sécurise les appli E
 const articleRoutes = require('./routes/article'); // on récupère les routes pour les articles
 const userRoutes = require('./routes/user'); // on récupère les routes pour user
 const path = require('path'); // on récupère l'élément de node.js permettant d'accéder au chemin de notre systeme de fichiers
-//const { Server } = require('http');
+//const { Server } = require('http'); // A SUPPRIMER APRES TEST/////////////////////
 
 
 /*CROSS ORIGIN RESOURCE SHARING */
@@ -21,9 +21,9 @@ const path = require('path'); // on récupère l'élément de node.js permettant
 }); 
 
 /* BODY PARSER */
-//app.use(bodyParser.urlencoded({ extended: true })); // on applique une fonction du body parser qui nous servira pour express mongo sanitize
+//app.use(bodyParser.urlencoded({ extended: true })); // A SUPPRIMER (Mongo Sanitize)
 app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui va transformer le corps des requêtes en objets JSON
-//app.use(mongoSanitize()); // MONGO SANITIZE !!!!!! to remove prohibed characters
+//app.use(mongoSanitize()); // MONGO SANITIZE !!!!!! A SUPPRIMER 
 
 /* HELMET */
 app.use(helmet());
@@ -34,7 +34,6 @@ app.use('/api/article', articleRoutes);//
 app.use('/api/auth', userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images'))) // on veut que cette requête serve le dossier statique /image dont l'adresse est déterminé par la méthode path.join (avec __dirname = nom du dossier dans lequel on va se trouver auquel on va ajouter "images" 
 
-// app.use authentification une fois la base de donnée appellée !!!!!!!!!!!
 
 // EXPORT SERVER
 

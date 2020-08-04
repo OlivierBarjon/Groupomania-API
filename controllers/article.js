@@ -28,7 +28,7 @@ exports.createArticle = (req, res, next) => {
 
 
 
-/* POST LIKE */
+/* POST LIKE (PROJET D'EVOLUTION) */
 /* exports.postLike = (req, res, next) => {
   const like = req.body.like;
   const userId = req.body.userId;
@@ -98,19 +98,12 @@ exports.createArticle = (req, res, next) => {
 /* GET */
 exports.getAllArticle = (req, res, next) => {
   const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({order: sequelize.literal('(updatedAt) DESC')}) // ordonné par ordre de mise à jour inverse
+  Article.findAll({order: sequelize.literal('(createdAt) DESC')}) // ordonné par ordre de mise à jour inverse
     .then(articles => res.status(200).json(articles))
     .catch(error => res.status(400).json({ error : "gettallarticle" }));
 
 };
 
-/* exports.getAllArticle = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-  Article.findAndCountAll({order: sequelize.col('createdAt')})// récuparation de la liste complète des articles en incluant l'user
-    .then(articles => res.status(200).json(articles))
-    .catch(error => res.status(400).json({ error : "gettallarticle" }));
-
-}; */
 
 
 /* GET ONE */
