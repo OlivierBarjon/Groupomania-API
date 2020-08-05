@@ -7,8 +7,8 @@ module.exports = (sequelize) => {
 
     static associate(models) {
       models.User.hasMany(models.Article,{
-        foreignKey: 'idUSERS'// INUTILE
-      })// define association here
+        foreignKey: 'idUSERS' 
+      })
     }
   };
   User.init({
@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      isEmail: true // respect du format email)
+      isEmail: true // respect du format email
     },
     password: {
       type: DataTypes.STRING,

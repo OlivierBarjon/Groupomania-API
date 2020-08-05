@@ -10,16 +10,13 @@ const ArticleModelBuilder = require('../models/Article');// récupération du mo
 
 /* SIGNUP */
 exports.signup = (req, res, next) => {
-    //console.log(req.get("sequelize"));
     const User = UserModelBuilder(sequelize);
-    //console.log(User);
     bcrypt.hash(req.body.password, 10) // on hash le mot de passe (on exécute 10 fois l'algo pour crypter correctement le mot de passe)
         .then(hash => {// on récupère le hash du mdp (c'est une promise) 
             const user = new User({ // on crée le nouveau utilisateur avec le modèle sequelize
                 username: req.body.username,
                 email: req.body.email, // on enregistre l'email du body dans le paramètre email
                 password: hash,  // on enregistre le hash dans le paramètre password
-                //isAdmin: req.body.isAdmin // ??????? / on enregistre si oui ou non il s'agit d'un utilisateur possédant le rôle de modérateur
             });
             user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
                 .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
@@ -49,18 +46,16 @@ exports.signin = (req, res, next) => {
                             process.env.TOKEN_KEY, // clé secrète
                             { expiresIn: '24h' } //durée de vie
                         ),
-                        isAdmin : user.isAdmin // L'information à propos du status de modérateur de cet utilisateur
+                        isAdmin : user.isAdmin // L'information à propos du status de modérateur de cet utilisateur (pour les fonctionnalités associées)
                     });
                 })
                 .catch(error => res.status(500).json({ error }));
         })
-        .catch(error => res.status(500).json({ error : "erreur signin" }));//pour afficher un problème de connexion 
+        .catch(error => res.status(500).json({ error : "erreur signin" }));
 };
 
 
 /* DELETE USER */
-
-
   exports.deleteUser = (req, res, next) => {
     const User = UserModelBuilder(sequelize);
     const Article = ArticleModelBuilder(sequelize);
@@ -92,7 +87,7 @@ exports.signin = (req, res, next) => {
                                 };
                             })
                             .catch(error => res.status(500).json({ error : "pas d'article trouvé articlefindall" }));
-                            //////// On supprime l'utilisateur
+                            // On supprime l'utilisateur
                             User.destroy({ where: {email: req.body.email} }) 
                                 .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
                                 .catch(error => res.status(400).json({ error })); 
@@ -104,15 +99,13 @@ exports.signin = (req, res, next) => {
 };
 
 
-/* GET ONE USER */
-
-exports.getOneUser = (req, res, next) => {
-    const Article = ArticleModelBuilder(sequelize);
+/* GET ONE USER ### PROJET EVOLUTION ### */
+/* exports.getOneUser = (req, res, next) => {
+    //const Article = ArticleModelBuilder(sequelize); // Pour évolution
     const User = UserModelBuilder(sequelize);
-    console.log(User);
     //console.log(models.Article);
-    //raw SQL : SELECT * FROM users WHERE id = X JOIN articles;
-    User.findOne({ where:{ id: req.params.id } }) // récupération d'un user unique // , include : [{model : Article}] 
+    //PROJET D'EVOLUTION : raw SQL : SELECT * FROM users WHERE id = X JOIN articles; > , include : [{model : Article}] 
+    User.findOne({ where:{ id: req.params.id } }) // récupération d'un user unique
       .then(users => res.status(200).json(users))
       .catch(error => res.status(400).json({ error }));
-  };
+  }; */

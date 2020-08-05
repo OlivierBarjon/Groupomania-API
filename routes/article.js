@@ -10,9 +10,6 @@ const multer = require('../middleware/multer-config'); // on récupère le middl
 /* POST */
 router.post ('/', auth, multer, articleCtrl.createArticle); // on applique la logique métier createArticle du controleur à la route POST
 
-/* POST LIKE */
-//router.post('/:id/like', /* auth, */ articleCtrl.postLike); // on applique la logique métier postLike du controleur à la route POST LIKE
-
 /* GET */
 router.get('/', auth, articleCtrl.getAllArticle); // on applique la logique métier getAllArticle du controleur à la route GET
 
@@ -25,15 +22,17 @@ router.get('/selection', auth, articleCtrl.getSelection); // on applique la logi
 /* GET ONE */
 router.get('/:id', auth,  articleCtrl.getOneArticle); // on applique la logique métier getOneArticle du controleur à la route GET (ID)
 
-/* PUT */
-router.put('/:id', auth, multer, articleCtrl.modifyArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
-
 /* PUT MODERATEUR */
 router.put('/select/:id', auth, articleCtrl.selectArticle); // on applique la logique métier selectArticle du controleur à la route PUT
 
-/* DELETE */
-router.delete('/:id', auth,  articleCtrl.deleteArticle); // on applique la logique métier deleteArticle du controleur à la route DELETE
+/* PUT ## PROJET D'EVOLUTION DU PROJET ### */
+//router.put('/:id', auth, multer, articleCtrl.modifyArticle); // on applique la logique métier modifyArticle du controleur à la route PUT
 
+/* DELETE ## PROJET D'EVOLUTION DU PROJET ### */
+//router.delete('/:id', auth,  articleCtrl.deleteArticle); // on applique la logique métier deleteArticle du controleur à la route DELETE
+
+/* POST LIKE ## PROJET D'EVOLUTION DU PROJET ### */
+//router.post('/:id/like', /* auth, */ articleCtrl.postLike); // on applique la logique métier postLike du controleur à la route POST LIKE
 
 
 /* EXPORT */

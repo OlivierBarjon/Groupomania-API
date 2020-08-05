@@ -7,10 +7,10 @@ const auth = require('../middleware/auth');
 
 /* ### ROUTES ### */
 
-router.post('/signup', userCtrl.signup);
-router.post('/signin', bouncer.block, userCtrl.signin);
-router.delete('/deleteUser', auth, userCtrl.deleteUser);
-router.get('/getOneUser/:id', auth, userCtrl.getOneUser);
+router.post('/signup', userCtrl.signup); // inscription
+router.post('/signin', bouncer.block, userCtrl.signin); // connexion
+router.delete('/deleteUser', auth, userCtrl.deleteUser); // suppression d'un utilisateur en cascade sur toutes les tables associées
+// router.get('/getOneUser/:id', auth, userCtrl.getOneUser); // PROJET D'EVOLUTION
 
 /* EXPORT */
 module.exports = router;

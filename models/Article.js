@@ -5,8 +5,6 @@ module.exports = (sequelize) => {
   class Article extends Model {
 
     static associate(models) {
-      //console.log(models);// TEST
-      // define association here
       models.Article.belongsTo(models.User,{
         foreignKey: 'idUSERS'
       })
@@ -19,6 +17,7 @@ module.exports = (sequelize) => {
     idUSERS: DataTypes.INTEGER,
     file: DataTypes.STRING,
     selection: DataTypes.BOOLEAN,
+    // PROJET D'EVOLUTION
     /* likes: DataTypes.INTEGER,
     dislikes: DataTypes.INTEGER,
     usersLiked: DataTypes.STRING,

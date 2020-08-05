@@ -9,7 +9,6 @@ const helmet = require('helmet'); // on récupère Helmet (sécurise les appli E
 const articleRoutes = require('./routes/article'); // on récupère les routes pour les articles
 const userRoutes = require('./routes/user'); // on récupère les routes pour user
 const path = require('path'); // on récupère l'élément de node.js permettant d'accéder au chemin de notre systeme de fichiers
-//const { Server } = require('http'); // A SUPPRIMER APRES TEST/////////////////////
 
 
 /*CROSS ORIGIN RESOURCE SHARING */
@@ -21,9 +20,7 @@ const path = require('path'); // on récupère l'élément de node.js permettant
 }); 
 
 /* BODY PARSER */
-//app.use(bodyParser.urlencoded({ extended: true })); // A SUPPRIMER (Mongo Sanitize)
-app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui va transformer le corps des requêtes en objets JSON
-//app.use(mongoSanitize()); // MONGO SANITIZE !!!!!! A SUPPRIMER 
+app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui va transformer le corps des requêtes en objets JSON 
 
 /* HELMET */
 app.use(helmet());

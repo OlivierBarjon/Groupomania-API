@@ -1,6 +1,5 @@
 const ArticleModelBuilder = require('../models/Article');// récupération du modèle article
-const UserModelBuilder = require('../models/User');
-//const User = require('../models/User');
+const UserModelBuilder = require('../models/User'); // récupération du modèle user
 
 const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
 const sequelize = require('../database.js'); // récupération de la base de donnée
@@ -11,9 +10,7 @@ const { models } = require('../database.js');
 
 /*POST */
 exports.createArticle = (req, res, next) => {
-  //console.log(req.get("sequelize"));
   const Article = ArticleModelBuilder(sequelize);
-  //console.log(Article);
   const articleObject = JSON.parse(req.body.article); // on extrait l'objet JSON de notre req.body.article
   const article = new Article({ // on crée une instance de notre classe Sauce
     idUSERS : articleObject.userId,
@@ -28,7 +25,117 @@ exports.createArticle = (req, res, next) => {
 
 
 
-/* POST LIKE (PROJET D'EVOLUTION) */
+/* GET */
+exports.getAllArticle = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  const User = UserModelBuilder(sequelize); // JOIN
+  const models = {Article, User}; // JOIN
+  User.associate(models); // JOIN
+  Article.associate(models); // JOIN
+  Article.findAll({order: sequelize.literal('(createdAt) DESC'), include: {model : models.User, attributes: ['username']} }) // ordonné par ordre de mise à jour inverse + Association table Users (uniquement le username !)
+    .then(articles => res.status(200).json(articles))
+    .catch(error => res.status(400).json({ error : "gettallarticle" }));
+
+};
+
+
+/* GET ONE */
+exports.getOneArticle = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  const User = UserModelBuilder(sequelize); // JOIN
+  const models = {Article, User}; // JOIN
+  User.associate(models); // JOIN
+  Article.associate(models); // JOIN
+  Article.findOne({ where:{ id: req.params.id } , include: {model : models.User, attributes: ['username']} }) // récupération d'un article unique en incluant l'user (JOIN) raw SQL : SELECT * FROM articles JOIN users;
+    .then(article => {
+       res.status(200).json(article);
+    }  
+    )
+    .catch(error => res.status(400).json({ error }));
+};
+
+/* GET LAST 3 POST (HOME PAGE) */
+exports.get3Articles = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  const User = UserModelBuilder(sequelize); // JOIN
+  const models = {Article, User}; // JOIN
+  User.associate(models); // JOIN
+  Article.associate(models); // JOIN
+  Article.findAll({limit:3, order: sequelize.literal('(createdAt) DESC'), include: {model : models.User, attributes: ['username']} })// récuparation de la liste complète des articles (limit 3) en associant l'user
+    .then(articles => res.status(200).json(articles))
+    .catch(error => res.status(400).json({ error : "gettallarticle" }));
+};
+
+/* GET SELECTION (HOME PAGE) */
+exports.getSelection = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  const User = UserModelBuilder(sequelize); // JOIN
+  const models = {Article, User}; // JOIN
+  User.associate(models); // JOIN
+  Article.associate(models); // JOIN
+  Article.findAll({ where:{ selection : true }, order: sequelize.random(), include: {model : models.User, attributes: ['username']} })// récuparation de la liste complète des articles en associant l'user
+    .then(articles => res.status(200).json(articles))
+    .catch(error => res.status(400).json({ error : "gettallarticle" }));
+};
+
+
+/* PUT MODERATEUR */
+exports.selectArticle = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  //console.log(req.body);//TEST
+    Article.findOne({ where:{ id: req.params.id } })
+      .then(() => { 
+          Article.update({ 
+            selection : req.body.selection, 
+          },{ where:{ id: req.params.id } }) //mise à jour d'un article
+            .then(() => res.status(200).json({ message: 'Article modif selection' }))
+            .catch(error => res.status(400).json({ error }));
+        
+      }).catch(error => res.status(400).json({ error }))
+};
+
+
+/* PUT ### PROJET D'EVOLUTION ### */
+/* exports.modifyArticle = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+    const articleObject = JSON.parse(req.body.article);
+  
+    Article.findOne({ where:{ id: req.params.id } })
+      .then(article => {
+        const filename = article.file.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {// suppression de l'image à remplacer
+          Article.update({ 
+            idUSERS : articleObject.userId,
+            title : articleObject.title,
+            text : articleObject.text,
+            file : `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
+          },{ where:{ id: req.params.id } }) //mise à jour d'un article
+            .then(() => res.status(200).json({ message: 'Article et image modifié' }))
+            .catch(error => res.status(400).json({ error }));
+        });
+      }).catch(error => res.status(400).json({ error }))
+}; */
+
+
+/* DELETE ### PROJET D'EVOLUTION ### */
+
+/* exports.deleteArticle = (req, res, next) => {
+  const Article = ArticleModelBuilder(sequelize);
+  Article.findOne({ where:{ id: req.params.id } }) // on recherche l'objet qui a l'id qui correspond au paramètre de la requête pour avoir l'url de l'image (on aura alors accès au nom du fichier et pourra le supprimer)
+    .then(article => { // on veut récupérer le nom du fichier précisément
+      const filename = article.file.split('/images/')[1]; // on récupère l'url de l'image retourné par la base et on la split autour de la chaine de caractère "/images/". On récupère ainsi uniquement le nom du fichier
+      fs.unlink(`images/${filename}`, () => { // on appelle la fonction "unlink" de fs qui permet de supprimer le fichier (1er arg : chemin de ce fichier). Le deuxième arg étant un callback qu'on lance une fois le fichier supprimé
+        Article.destroy({ where:{ id: req.params.id } }) // ce callback supprime l'article de la base de donnée
+          .then(() => res.status(200).json({ message: 'Article supprimé !' }))
+          .catch(error => res.status(400).json({ error }));
+      });
+    })
+    .catch(error => res.status(500).json({ error }));
+}; */
+
+
+
+/* POST LIKE ####### PROJET D'EVOLUTION ###### */
 /* exports.postLike = (req, res, next) => {
   const like = req.body.like;
   const userId = req.body.userId;
@@ -93,102 +200,3 @@ exports.createArticle = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }))
   };
 }; */
-
-
-/* GET */
-exports.getAllArticle = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({order: sequelize.literal('(createdAt) DESC')}) // ordonné par ordre de mise à jour inverse
-    .then(articles => res.status(200).json(articles))
-    .catch(error => res.status(400).json({ error : "gettallarticle" }));
-
-};
-
-
-
-/* GET ONE */
-exports.getOneArticle = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-  const User = UserModelBuilder(sequelize);
-  const models = {Article, User};
-  User.associate(models);
-  Article.associate(models);
-  //raw SQL : SELECT * FROM articles JOIN users;
-  Article.findOne({ where:{ id: req.params.id } , include: models.User   }) // récupération d'un article unique en incluant l'user  
-    .then(article => {
-       res.status(200).json(article);
-    }  
-    )
-    .catch(error => res.status(400).json({ error }));
-};
-
-/* GET 3 (HOME PAGE) */
-exports.get3Articles = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({limit:3, order: sequelize.literal('(createdAt) DESC')})// récuparation de la liste complète des articles
-    .then(articles => res.status(200).json(articles))
-    .catch(error => res.status(400).json({ error : "gettallarticle" }));
-};
-
-/* GET SELECTION (HOME PAGE) */
-exports.getSelection = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-  Article.findAll({ where:{ selection : true }, order: sequelize.random() })// récuparation de la liste complète des articles
-    .then(articles => res.status(200).json(articles))
-    .catch(error => res.status(400).json({ error : "gettallarticle" }));
-};
-
-/* PUT */
-exports.modifyArticle = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-    const articleObject = JSON.parse(req.body.article);
-  
-    Article.findOne({ where:{ id: req.params.id } })
-      .then(article => {
-        const filename = article.file.split('/images/')[1];
-        fs.unlink(`images/${filename}`, () => {// suppression de l'image à remplacer
-          Article.update({ 
-            idUSERS : articleObject.userId,
-            title : articleObject.title,
-            text : articleObject.text,
-            file : `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
-          },{ where:{ id: req.params.id } }) //mise à jour d'un article
-            .then(() => res.status(200).json({ message: 'Article et image modifié' }))
-            .catch(error => res.status(400).json({ error }));
-        });
-      }).catch(error => res.status(400).json({ error }))
-};
-
-
-/* PUT MODERATEUR */
-exports.selectArticle = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-  //console.log(req.body);//TEST
-    Article.findOne({ where:{ id: req.params.id } })
-      .then(() => { 
-          Article.update({ 
-            selection : req.body.selection, 
-          },{ where:{ id: req.params.id } }) //mise à jour d'un article
-            .then(() => res.status(200).json({ message: 'Article modif selection' }))
-            .catch(error => res.status(400).json({ error }));
-        
-      }).catch(error => res.status(400).json({ error }))
-};
-
-
-/* DELETE */
-
-exports.deleteArticle = (req, res, next) => {
-  const Article = ArticleModelBuilder(sequelize);
-  Article.findOne({ where:{ id: req.params.id } }) // on recherche l'objet qui a l'id qui correspond au paramètre de la requête pour avoir l'url de l'image (on aura alors accès au nom du fichier et pourra le supprimer)
-    .then(article => { // on veut récupérer le nom du fichier précisément
-      const filename = article.file.split('/images/')[1]; // on récupère l'url de l'image retourné par la base et on la split autour de la chaine de caractère "/images/". On récupère ainsi uniquement le nom du fichier
-      fs.unlink(`images/${filename}`, () => { // on appelle la fonction "unlink" de fs qui permet de supprimer le fichier (1er arg : chemin de ce fichier). Le deuxième arg étant un callback qu'on lance une fois le fichier supprimé
-        Article.destroy({ where:{ id: req.params.id } }) // ce callback supprime l'article de la base de donnée
-          .then(() => res.status(200).json({ message: 'Article supprimé !' }))
-          .catch(error => res.status(400).json({ error }));
-      });
-    })
-    .catch(error => res.status(500).json({ error }));
-};
-
