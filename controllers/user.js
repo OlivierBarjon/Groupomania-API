@@ -78,8 +78,8 @@ exports.signin = (req, res, next) => {
                                     const art = articles[a];
                                     //console.log(art.dataValues.file);//TEST
                                     const filename = art.dataValues.file.split('/images/')[1]; //
-                                    console.log(filename); 
-                                    fs.unlink(`images/${filename}`, () => { // suppression de l'image et de l'article (important)
+                                    //console.log(filename); 
+                                    fs.unlink(`images/${filename}`, () => { // suppression de l'image ET de l'article
                                         Article.destroy({ where:{ id: art.dataValues.id } }) // 
                                         .then(() => res.status(200).json({ message: 'Article supprimé !' }))
                                         .catch(error => res.status(400).json({ error : 'articledestroy' }));
